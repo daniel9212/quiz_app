@@ -1,5 +1,8 @@
 'use client'
 
+import {
+  useState, useEffect,
+} from 'react';
 import { redirect } from 'next/navigation';
 
 import type { QuestionParams } from '@/app/quiz/[quizId]/question/[questionId]/components/QuestionLayout';
@@ -8,10 +11,7 @@ import {
   type StorageAnswer,
   getScorePerQuestion,
 } from '@/app/quiz/[quizId]/question/[questionId]/helpers';
-
-import {
-  useState, useEffect,
-} from 'react';
+import { request } from '@/app/api/base';
 
 const INITIAL_QUIZ_STATE = {
   quizPoints: 0,
@@ -22,19 +22,31 @@ export default function Score({ params: { quizId } }: { params: QuestionParams }
   const [{ quizPoints, totalQuizQuestions }, setQuizState] = useState(INITIAL_QUIZ_STATE);
 
   useEffect(() => {
-    const questions = JSON.parse(localStorage.getItem('quizes')!)?.[quizId] ?? [];
+    (async () => {
+      let questions;
+      const storageQuestions = JSON.parse(localStorage.getItem('quizes')!)?.[quizId] ?? [];
 
-    if (questions.length === 0) {
-      redirect(`/quiz/${quizId}`);
-    }
+      try {
+        const questionsResponse = await request(`/api/quiz/${quizId}`);
+        questions = questionsResponse.data.questions;
+      } catch(error) {
+        questions = storageQuestions;
+        console.error(error);
+      }
+  
+      if (storageQuestions.length === 0) {
+        redirect(`/quiz/${quizId}`);
+      }
+  
+      const quizPoints = storageQuestions.reduce((total: number, storageAnswer: StorageAnswer) => total + getScorePerQuestion(storageAnswer), 0);
+      const totalQuizQuestions = questions.length;
+  
+      setQuizState({
+        quizPoints,
+        totalQuizQuestions,
+      });
+    })()
 
-    const quizPoints = questions.reduce((total: number, storageAnswer: StorageAnswer) => total + getScorePerQuestion(storageAnswer), 0);
-    const totalQuizQuestions = questions.length;
-
-    setQuizState({
-      quizPoints,
-      totalQuizQuestions,
-    });
   }, [quizId]);
 
   return (
