@@ -1,36 +1,25 @@
-import Header from '../components/Header';
-import Button from '../components/Button';
+import Header from '@/app/components/Header';
+import LinkButton from '@/app/components/LinkButton';
+import Error from '@/app/components/Error';
+import { getQuizCategories } from '@/app/helpers/jsonProcessing';
 
-const CATEGORIES = [
-  {
-    id: 25,
-    name: 'Art',
-  },
-  {
-    id: 20,
-    name: 'Mythology',
-  },
-  {
-    id: 21,
-    name: 'Sports',
-  },
-  {
-    id: 23,
-    name: 'History',
-  },
-];
+export default async function Categories() {
+  const { error, data } = await getQuizCategories();
+  
+  if (error) {
+    return <Error message={error} />
+  }
 
-export default function Categories() {
   return (
     <section>
       <Header title='Start Quiz!' />
       <div className="grid grid-cols-2 gap-10">
-        {CATEGORIES.map(({ id, name }) => (
-          <Button
-            title={name}
+        {data.map(({ id, category }) => (
+          <LinkButton
+            title={category}
             href={`/quiz/${id}`}
             key={id}
-            className="bg-amber-300"
+            className="bg-amber-300 w-full"
           />
         ))}
       </div>

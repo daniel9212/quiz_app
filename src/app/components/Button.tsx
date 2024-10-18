@@ -1,10 +1,19 @@
-import Link from 'next/link';
+import type { ButtonHTMLAttributes } from 'react';
+import classNames from 'classnames';
 
-export default function Button({ title, href, className, ...restProps }) {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  title: string,
+  className?: string,
+}
+
+export default function Button({ title, className, ...restProps }: ButtonProps) {
+  const buttonStyles = classNames('text-black font-bold p-4 rounded-lg', {
+    [className!]: !!className,
+  });
+
   return (
-    <button {...restProps} className={`text-black p-4 rounded-lg${className ? ' ' + className : ''}`}>
-      {href && <Link className="text-lg font-bold" href={href}>{title}</Link>}
-      {!href && title}
+    <button {...restProps} className={buttonStyles}>
+      {title}
     </button>
   );
 };

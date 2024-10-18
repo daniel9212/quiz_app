@@ -1,9 +1,11 @@
-import Link from "next/link";
+import LinkButton from '@/app/components/LinkButton';
 
 export default function Home() {
   return (
-    <button className="bg-amber-300 p-4 rounded-2xl">
-      <Link className="text-black text-lg font-bold" href="/categories">Pick Category</Link>
-    </button>
+    <LinkButton
+      href="/categories"
+      title="Pick Category"
+      className="bg-amber-300 rounded-2xl"
+    />
   );
 }

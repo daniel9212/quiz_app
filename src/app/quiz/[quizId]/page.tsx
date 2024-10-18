@@ -1,39 +1,27 @@
 import Header from '@/app/components/Header';
-import Button from '@/app/components/Button';
+import Error from '@/app/components/Error';
+import { getQuizData } from '@/app/helpers/jsonProcessing';
+import Navigation from '@/app/quiz/[quizId]/components/Navigation';
 
-export default async function Quiz({ params: { quizId } }) {
-  const response = {};
+interface QuizProps {
+  params: {
+    quizId: string,
+  },
+}
 
-  try {
-    const quizRes = await fetch(`https://opentdb.com/api.php?amount=10&category=${quizId}`);
-    const { results: questions } = await quizRes.json();
-    response.category = questions[0]?.category ?? '';
-  } catch (error) {
-    response.error = error;
-    console.err(error);
-  }
-
-  const { error, category } = response;
+export default async function Quiz({ params: { quizId } }: QuizProps) {
+  const { error, data } = await getQuizData(quizId);
 
   if (error) {
-    return <span>{error}</span>
+    return <Error message={error} />
   }
+
+  const { category } = data;
 
   return (
     <section>
       <Header title={`Welcome to ${category} Quiz!`} />
-      <div className='flex justify-around'>
-        <Button
-          href="/categories"
-          title="Go Back"
-          className="bg-white"
-        />
-        <Button
-          href={`/quiz/${quizId}/question/1`}
-          title="Start Quiz"
-          className="bg-sky-600 text-white"
-        />
-      </div>
+      <Navigation quizId={quizId} />
     </section>
   );
 }
