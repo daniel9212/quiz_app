@@ -1,7 +1,6 @@
 'use client'
 
 import type { Question } from '@/app/helpers/jsonProcessing';
-import type { StorageQuizes } from './hooks/useQuestionData';
 
 const generateCorrectAnswerIndex = ({
   question, questionsNumber,

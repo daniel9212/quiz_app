@@ -1,7 +1,5 @@
 'use client'
 
-import { redirect } from 'next/navigation';
-
 import type { Question } from '@/app/helpers/jsonProcessing';
 import LinkButton from '@/app/components/LinkButton';
 import useQuestionData from '@/app/quiz/[quizId]/question/[questionId]/hooks/useQuestionData';
@@ -33,10 +31,6 @@ export default function QuestionLayout(quizProps: QuestionLayoutProps) {
   } = useQuestionData(quizProps);
 
   const { quizId } = quizProps;
-
-  if (questionId < 0) {
-    return redirect(`/quiz/${quizId}`);
-  }
 
   return (
     <div className='flex items-center flex-col h-full w-full'>

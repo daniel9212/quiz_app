@@ -25,25 +25,34 @@ export default function Navigation({ quizId }: NavigationProps) {
   };
 
   return (
-    <div className='flex justify-around'>
-      <LinkButton
-        href="/categories"
-        title="Go Back"
-        className="bg-white"
-      />
-      <LinkButton
-        href={`/quiz/${quizId}/question/1`}
-        title={isQuizStarted ? 'View Progress' : 'Start Quiz'}
-        className="bg-sky-600 text-white"
-      />
-      {isQuizStarted && (
+    <>
+      <div className='flex justify-around'>
+        <LinkButton
+          href="/categories"
+          title="Go Back"
+          className="bg-white"
+        />
         <LinkButton
           href={`/quiz/${quizId}/question/1`}
-          title="Restart Quiz"
-          className="bg-red-600 text-white"
-          onClick={onRestartQuiz}
+          title={isQuizStarted ? 'View Progress' : 'Start Quiz'}
+          className="bg-sky-600 text-white"
         />
-      )}
-    </div>
+        {isQuizStarted && (
+          <LinkButton
+            href={`/quiz/${quizId}/question/1`}
+            title="Restart Quiz"
+            className="bg-red-600 text-white"
+            onClick={onRestartQuiz}
+          />
+        )}
+      </div>
+      <div className="flex justify-center mt-32 -mb-32">
+        <LinkButton
+          title="Create Question"
+          href={`/quiz/${quizId}/create-question`}
+          className="bg-amber-300 w-48"
+        />
+      </div>
+    </>
   );
 }
