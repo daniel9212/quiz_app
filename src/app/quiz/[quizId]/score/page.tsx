@@ -3,7 +3,7 @@
 import {
   useState, useEffect,
 } from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import type { QuestionParams } from '@/app/quiz/[quizId]/question/[questionId]/components/QuestionLayout';
 import LinkButton from '@/app/components/LinkButton';
@@ -20,6 +20,7 @@ const INITIAL_QUIZ_STATE = {
 
 export default function Score({ params: { quizId } }: { params: QuestionParams }) {
   const [{ quizPoints, totalQuizQuestions }, setQuizState] = useState(INITIAL_QUIZ_STATE);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -35,7 +36,7 @@ export default function Score({ params: { quizId } }: { params: QuestionParams }
       }
   
       if (storageQuestions.length === 0) {
-        redirect(`/quiz/${quizId}`);
+        router.push(`/quiz/${quizId}`);
       }
   
       const quizPoints = storageQuestions.reduce((total: number, storageAnswer: StorageAnswer) => total + getScorePerQuestion(storageAnswer), 0);
@@ -47,7 +48,7 @@ export default function Score({ params: { quizId } }: { params: QuestionParams }
       });
     })()
 
-  }, [quizId]);
+  }, [quizId, router]);
 
   return (
     <div>
