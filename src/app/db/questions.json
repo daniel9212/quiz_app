@@ -1,0 +1,178 @@
+{
+  "amum2d26tkh": {
+    "id": "amum2d26tkh",
+    "type": "boolean",
+    "difficulty": "medium",
+    "question": "The Japanese god Izanagi successfully returned his wife Izanami from the Underworld.",
+    "correct_answer": "False",
+    "incorrect_answers": ["True"]
+  },
+  "amum2d26tki": {
+    "id": "amum2d26tki",
+    "type": "multiple",
+    "difficulty": "medium",
+    "question": "In Greek Mythology, who killed Achilles?",
+    "correct_answer": "Paris",
+    "incorrect_answers": ["Hector", "Helen", "Pericles"]
+  },
+  "amum2d26tkj": {
+    "id": "amum2d26tkj",
+    "type": "multiple",
+    "difficulty": "medium",
+    "question": "Which of these Roman gods doesn't have a counterpart in Greek mythology?",
+    "correct_answer": "Janus",
+    "incorrect_answers": ["Vulcan", "Juno", "Mars"]
+  },
+  "amum2d26tkk": {
+    "id": "amum2d26tkk",
+    "type": "multiple",
+    "difficulty": "hard",
+    "question": "Nidhogg is a mythical creature from what mythology?",
+    "correct_answer": "Norse",
+    "incorrect_answers": ["Egyptian", "Greek", "Hindu"]
+  },
+  "amum2d26tkl": {
+    "id": "amum2d26tkl",
+    "type": "multiple",
+    "difficulty": "medium",
+    "question": "Hera is god of...",
+    "correct_answer": "Marriage",
+    "incorrect_answers": ["Agriculture", "Sea", "War"]
+  },
+  "amum2d26tkm": {
+    "id": "amum2d26tkm",
+    "type": "multiple",
+    "difficulty": "easy",
+    "question": "In what year did the Great Northern War, between Russia and Sweden, end?",
+    "correct_answer": "1721",
+    "incorrect_answers": ["1726", "1727", "1724"]
+  },
+  "amum2d26tkn": {
+    "id": "amum2d26tkn",
+    "type": "multiple",
+    "difficulty": "easy",
+    "question": "The idea of Socialism was articulated and advanced by whom?",
+    "correct_answer": "Karl Marx",
+    "incorrect_answers": ["Vladimir Lenin", "Joseph Stalin", "Vladimir Putin"]
+  },
+  "amum2d26tko": {
+    "id": "amum2d26tko",
+    "type": "multiple",
+    "difficulty": "medium",
+    "question": "What year were the Marian Reforms instituted in the Roman Republic?",
+    "correct_answer": "107 BCE",
+    "incorrect_answers": ["42 BCE", "264 BCE", "102 CE"]
+  },
+  "amum2d26tkp": {
+    "id": "amum2d26tkp",
+    "type": "multiple",
+    "difficulty": "medium",
+    "question": "Which of the following Presidents of the United States was assassinated?",
+    "correct_answer": "William McKinley",
+    "incorrect_answers": [
+      "Lyndon Johnson",
+      "Chester Arthur",
+      "Franklin Roosevelt"
+    ]
+  },
+  "amum2d26tkq": {
+    "id": "amum2d26tkq",
+    "type": "multiple",
+    "difficulty": "medium",
+    "question": "When did the Battle of the Bulge end?",
+    "correct_answer": "January 25, 1945",
+    "incorrect_answers": [
+      "August 6, 1945",
+      "December 7, 1941",
+      "December 16, 1944"
+    ]
+  },
+  "amum2d26tkr": {
+    "id": "amum2d26tkr",
+    "type": "multiple",
+    "difficulty": "medium",
+    "question": "Which of these are the name of a famous marker brand?",
+    "correct_answer": "Copic",
+    "incorrect_answers": ["Dopix", "Cofix", "Marx"]
+  },
+  "amum2d26tks": {
+    "id": "amum2d26tks",
+    "type": "multiple",
+    "difficulty": "hard",
+    "question": "Albrecht Dürer's birthplace and place of death were in...",
+    "correct_answer": "Nürnberg",
+    "incorrect_answers": ["Augsburg", "Bamberg", "Berlin"]
+  },
+  "amum2d26tkt": {
+    "id": "amum2d26tkt",
+    "type": "multiple",
+    "difficulty": "easy",
+    "question": "Who painted The Starry Night?",
+    "correct_answer": "Vincent van Gogh",
+    "incorrect_answers": ["Pablo Picasso", "Leonardo da Vinci", "Michelangelo"]
+  },
+  "amum2d26tku": {
+    "id": "amum2d26tku",
+    "type": "boolean",
+    "difficulty": "medium",
+    "question": "Pablo Picasso is one of the founding fathers of \"Cubism.\"",
+    "correct_answer": "True",
+    "incorrect_answers": ["False"]
+  },
+  "amum2d26tkv": {
+    "id": "amum2d26tkv",
+    "type": "multiple",
+    "difficulty": "easy",
+    "question": "Which Van Gogh painting depicts the view from his asylum in Saint-Rémy-de-Provence in southern France?",
+    "correct_answer": "The Starry Night",
+    "incorrect_answers": [
+      "Wheatfields with Crows",
+      "The Sower with Setting Sun",
+      "The Church at Auvers"
+    ]
+  },
+  "amum2d26tkw": {
+    "id": "amum2d26tkw",
+    "type": "boolean",
+    "difficulty": "medium",
+    "question": "Wilt Chamberlain scored his infamous 100-point-game against the New York Knicks in 1962.",
+    "correct_answer": "True",
+    "incorrect_answers": ["False"]
+  },
+  "amum2d26tkx": {
+    "id": "amum2d26tkx",
+    "type": "multiple",
+    "difficulty": "easy",
+    "question": "\"Stadium of Light\" is the home stadium for which soccer team?",
+    "correct_answer": "Sunderland FC",
+    "incorrect_answers": [
+      "Barcelona FC",
+      "Paris Saints-Germain",
+      "Manchester United"
+    ]
+  },
+  "amum2d26tky": {
+    "id": "amum2d26tky",
+    "type": "multiple",
+    "difficulty": "hard",
+    "question": "Which of these Russian cities did NOT contain a stadium that was used in the 2018 FIFA World Cup?",
+    "correct_answer": "Vladivostok",
+    "incorrect_answers": ["Rostov-on-Don", "Yekaterinburg", "Kaliningrad"]
+  },
+  "amum2d26tkz": {
+    "id": "amum2d26tkz",
+    "type": "multiple",
+    "difficulty": "easy",
+    "question": "Which city did the former NHL team \"The Nordiques\" originiate from?",
+    "correct_answer": "Quebec City",
+    "incorrect_answers": ["Houston", "Montreal", "New York"]
+  },
+  "amum2d26tl0": {
+    "id": "amum2d26tl0",
+    "type": "boolean",
+    "difficulty": "easy",
+    "question": "In Rugby League, performing a \"40-20\" is punished by a free kick for the opposing team.",
+    "correct_answer": "False",
+    "incorrect_answers": ["True"]
+  }
+}

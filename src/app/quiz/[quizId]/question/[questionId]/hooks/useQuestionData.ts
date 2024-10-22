@@ -3,14 +3,15 @@ import {
   useEffect, useReducer, useMemo,
 } from 'react';
 
-import type { Question } from '@/app/helpers/jsonProcessing';
 import {
   type StorageAnswer,
   generateResponseOptions, getQuizPoints,
 } from '../helpers';
+import type { QuestionData } from '@/app/api/quiz/[quizId]/question/[questionId]/handlers';
+import type { QuestionParams } from '@/app/sharedTypes/categories';
 
 export interface StorageQuizes {
-  [quizId: string]: StorageAnswer[],
+  [quizId: string]: Record<string, StorageAnswer>,
 }
 
 interface State {
@@ -38,16 +39,11 @@ const quizesReducer = (state: State, { type, payload }: Action): State => {
 };
 
 export default function useQuestionData({
-  quizId, questionId, questions,
-}: {
-  quizId: string,
-  questionId: string,
-  questions: Question[],
-}) {
+  quizId, questionId, questionData,
+}: QuestionParams & QuestionData) {
   const [quizesState, dispatchQuizesState] = useReducer<Reducer<State, Action>>(quizesReducer, {} as State);
-  const currentQuestionId = +questionId - 1;
   const { storageQuizes, selectedAnswer } = quizesState;
-  const currentStorageQuiz = storageQuizes?.[quizId] ?? [];
+  const currentStorageQuiz = storageQuizes?.[quizId] ?? {};
 
   useEffect(() => {
     const storageQuizes = JSON.parse(localStorage.getItem('quizes')!) ?? {};
@@ -56,14 +52,13 @@ export default function useQuestionData({
       type: 'init-storage-quizes',
       payload: {
         storageQuizes,
-        selectedAnswer: storageQuizes[quizId]?.[currentQuestionId]?.selectedAnswer,
+        selectedAnswer: storageQuizes[quizId]?.[questionId]?.selectedAnswer,
       },
     })
-  }, [quizId, currentQuestionId]);
+  }, [quizId, questionId]);
 
-  const currentQuestion = questions[currentQuestionId];
-  const responseOptions = useMemo(() => generateResponseOptions(currentQuestion), [currentQuestion]);
-  const { question, correct_answer } = currentQuestion;
+  const responseOptions = useMemo(() => generateResponseOptions(questionData), [questionData]);
+  const { question, correct_answer } = questionData;
   
   const onSelectAnswer = (answer: string) => {
     dispatchQuizesState({
@@ -71,10 +66,12 @@ export default function useQuestionData({
       payload: answer,
     });
     
-    const updatedCurrentQuiz = [...currentStorageQuiz];
-    updatedCurrentQuiz[currentQuestionId] = {
-      selectedAnswer: answer,
-      correctAnswer: correct_answer,
+    const updatedCurrentQuiz = {
+      ...currentStorageQuiz,
+      [questionId]: {
+        selectedAnswer: answer,
+        correctAnswer: correct_answer,
+      },
     };
     
     localStorage.setItem('quizes', JSON.stringify({
@@ -85,11 +82,11 @@ export default function useQuestionData({
   
   return ({
     currentQuestionState: {
-      selectedAnswer, onSelectAnswer, responseOptions, correctAnswer: correct_answer, question, questionId: currentQuestionId,
+      selectedAnswer, onSelectAnswer, responseOptions, correctAnswer: correct_answer, question, questionId,
     },
-    totalQuizQuestions: questions.length,
     quizPoints: getQuizPoints({
-      currentStorageQuiz, questionId: currentQuestionId, selectedAnswer, correctAnswer: correct_answer,
+      currentStorageQuiz, questionId, selectedAnswer, correctAnswer: correct_answer,
     }),
+    quizId,
   });
 }

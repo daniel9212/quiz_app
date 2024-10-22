@@ -1,6 +1,6 @@
 'use client'
 
-import type { Question } from '@/app/helpers/jsonProcessing';
+import type { Question } from '@/app/sharedTypes/categories';
 
 const generateCorrectAnswerIndex = ({
   question, questionsNumber,
@@ -33,14 +33,14 @@ export interface StorageAnswer {
 export const getQuizPoints = ({
   currentStorageQuiz, questionId, selectedAnswer, correctAnswer,
 }: {
-  currentStorageQuiz: StorageAnswer[],
-  questionId: number,
+  currentStorageQuiz: Record<string, StorageAnswer>,
+  questionId: string,
   selectedAnswer: string,
   correctAnswer: string,
 }) => {
   const isAnswerNewAndCorrect = !currentStorageQuiz[questionId] && (selectedAnswer === correctAnswer);
 
-  return currentStorageQuiz
+  return Object.values(currentStorageQuiz)
     .reduce((total, answer) => total + getScorePerQuestion(answer), isAnswerNewAndCorrect ? 1 : 0);
 };
 

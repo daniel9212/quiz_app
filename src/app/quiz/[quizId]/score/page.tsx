@@ -5,7 +5,7 @@ import {
 } from 'react';
 import { useRouter } from 'next/navigation';
 
-import type { QuestionParams } from '@/app/quiz/[quizId]/question/[questionId]/components/QuestionLayout';
+import type { QuestionParams } from '@/app/sharedTypes/categories';
 import LinkButton from '@/app/components/LinkButton';
 import {
   type StorageAnswer,
@@ -18,14 +18,19 @@ const INITIAL_QUIZ_STATE = {
   totalQuizQuestions: 0,
 };
 
+interface QuizState {
+  quizPoints: number,
+  totalQuizQuestions: number,
+}
+
 export default function Score({ params: { quizId } }: { params: QuestionParams }) {
-  const [{ quizPoints, totalQuizQuestions }, setQuizState] = useState(INITIAL_QUIZ_STATE);
+  const [{ quizPoints, totalQuizQuestions }, setQuizState] = useState<QuizState>(INITIAL_QUIZ_STATE);
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
       let questions;
-      const storageQuestions = JSON.parse(localStorage.getItem('quizes')!)?.[quizId] ?? [];
+      const storageQuestions: Record<string, StorageAnswer> = JSON.parse(localStorage.getItem('quizes')!)?.[quizId] ?? {};
 
       try {
         const questionsResponse = await request(`/api/quiz/${quizId}`);
@@ -35,11 +40,12 @@ export default function Score({ params: { quizId } }: { params: QuestionParams }
         console.error(error);
       }
   
-      if (storageQuestions.length === 0) {
+      const storageQuestionsArr = Object.values(storageQuestions);
+      if (storageQuestionsArr.length === 0) {
         router.push(`/quiz/${quizId}`);
       }
   
-      const quizPoints = storageQuestions.reduce((total: number, storageAnswer: StorageAnswer) => total + getScorePerQuestion(storageAnswer), 0);
+      const quizPoints = storageQuestionsArr.reduce((total: number, storageAnswer: StorageAnswer) => total + getScorePerQuestion(storageAnswer), 0);
       const totalQuizQuestions = questions.length;
   
       setQuizState({

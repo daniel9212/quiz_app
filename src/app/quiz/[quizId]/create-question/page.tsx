@@ -7,7 +7,7 @@ import {
 import uniqId from 'uniqid';
 import { useRouter } from 'next/navigation';
 
-import type { QuestionParams } from '@/app/quiz/[quizId]/question/[questionId]/components/QuestionLayout';
+import type { QuestionParams } from '@/app/sharedTypes/categories';
 import TextInput from '@/app/components/TextInput';
 import Button from '@/app/components/Button';
 import Plus from '@/app/components/icons/Plus';
@@ -60,7 +60,7 @@ export default function CreateQuestion({ params: { quizId } }: { params: Questio
     };
 
     try {
-      await request(`/api/quiz/${quizId}`, {
+      await request(`/api/quiz/${quizId}/create-question`, {
         method: 'POST',
         data: questionData,
       });

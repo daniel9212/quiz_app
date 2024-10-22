@@ -1,34 +1,15 @@
-import uniqId from 'uniqid';
+import type { CategoryData } from './handlers';
+import { readFromFile } from '@/app/api/file';
 
-import type { Quiz } from '@/app/helpers/jsonProcessing';
-import { readFromFile, writeToFile } from '@/app/api/file';
-
-const FILE_PATH = '/src/app/data/quizesData.json';
-
-// TODO: Add validation (if quizId is not in quizes)
-export async function POST(request: Request, { params: { quizId } }: { params: { quizId: string } }) {
-  const { data: { quizes } } = await readFromFile<{ quizes: Quiz }>(FILE_PATH);
-
-  const questionData = await request.json();
-
-  questionData.id = uniqId();
-
-  const { questions } = quizes[quizId];
-  quizes[quizId].questions = [...questions, questionData];
-
-  await writeToFile(FILE_PATH, JSON.stringify({ quizes }));
-
-  return new Response(JSON.stringify({ data: questionData }), {
-    headers: {
-      'Content-type': 'application/json',
-    },
-    status: 201,
-  });
-}
+const CATEGORIES_PATH = '/src/app/db/categories.json';
+const QUESTIONS_PATH = '/src/app/db/questions.json';
 
 export async function GET(_: Request, { params: { quizId } }: { params: { quizId: string } }) {
-  const { data: { quizes } } = await readFromFile<{ quizes: Quiz }>(FILE_PATH);
+  const { data: categoriesData } = await readFromFile<Record<string, CategoryData>>(CATEGORIES_PATH);
+  const { data: questionsData } = await readFromFile<Record<string, CategoryData>>(QUESTIONS_PATH);
 
-  const { questions } = quizes[quizId];
-  return Response.json({ questions });
+  const questionIds = categoriesData[quizId].questions;
+  const quizQuestions = questionIds.map(questionId => questionsData[questionId]);
+
+  return Response.json({ questions: quizQuestions });
 }
