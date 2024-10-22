@@ -27,11 +27,11 @@ const DEFAULT_ERROR_MESSAGE = "There was an error reading the files";
 export async function fetchQuestion({ quizId, questionId }: QuestionParams): Promise<QuestionReturn> {
   const {
     error: categoriesError, data: categoriesData,
-  } = await readFromFile<{ [id: string]: CategoryData }>('/src/app/db/categories.json');
+  } = await readFromFile<Record<string, CategoryData>>('/src/app/db/categories.json');
 
   const {
     error: questionsError, data: questionsData,
-  } = await readFromFile<{ [id: string]: Question }>('/src/app/db/questions.json');
+  } = await readFromFile<Record<string, Question>>('/src/app/db/questions.json');
 
   if (categoriesError || questionsError) {
     return {

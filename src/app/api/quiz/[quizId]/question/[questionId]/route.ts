@@ -6,7 +6,7 @@ interface QuizSelectedAnswers {
   }
 }
 
-interface UserData {
+export interface UserData {
   [quizId: string]: QuizSelectedAnswers
 }
 
