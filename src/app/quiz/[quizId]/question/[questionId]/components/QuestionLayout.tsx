@@ -10,7 +10,7 @@ import Score from './Score';
 
 export default function QuestionLayout({
   included: {
-    nextQuestionId, prevQuestionId, totalQuestionsNumber, questionIndex,
+    nextQuestionId, prevQuestionId, totalQuestionsNumber, questionIndex, selectedAnswers,
   }, ...quizProps
 }: QuestionWithAdditionalData & QuestionParams) {
   const {
@@ -23,7 +23,7 @@ export default function QuestionLayout({
     },
     quizPoints,
     quizId,
-  } = useQuestionData(quizProps);
+  } = useQuestionData({ ...quizProps, selectedAnswers });
 
   return (
     <div className='flex items-center flex-col h-full w-full'>

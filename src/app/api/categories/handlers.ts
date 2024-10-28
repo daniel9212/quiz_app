@@ -1,9 +1,5 @@
+import type { CategoryData } from '@/app/sharedTypes/categories';
 import { readFromFile } from '@/app/api/file';
-
-interface CategoryData {
-  id: string,
-  name: string,
-}
 
 interface CategoriesReturn {
   error: string | null,

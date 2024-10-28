@@ -7,7 +7,7 @@ import {
 import uniqId from 'uniqid';
 import { useRouter } from 'next/navigation';
 
-import type { QuestionParams } from '@/app/sharedTypes/categories';
+import type { QuizParams } from '@/app/sharedTypes/categories';
 import TextInput from '@/app/components/TextInput';
 import Button from '@/app/components/Button';
 import Plus from '@/app/components/icons/Plus';
@@ -16,7 +16,7 @@ import { request } from '@/app/api/base';
 
 const WRONG_ANSWERS_LIMIT = 3;
 
-export default function CreateQuestion({ params: { quizId } }: { params: QuestionParams }) {
+export default function CreateQuestion({ params: { quizId } }: { params: QuizParams }) {
   const router = useRouter()
   const [wrongAnswers, setWrongAnswers]  = useState<string[]>([]);
   const [errors, setErrors] = useState({});

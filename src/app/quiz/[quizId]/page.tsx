@@ -11,12 +11,23 @@ export default async function Quiz({ params: { quizId } }: { params: QuizParams 
     return <Error message={error} />
   }
 
-  const { name, questions } = data;
+  const {
+    quizData: {
+      name, questions,
+    },
+    included: {
+      hasQuizHistory,
+    },
+  } = data;
 
   return (
     <section>
       <Header title={`Welcome to ${name} Quiz!`} />
-      <Navigation quizId={quizId} startQuestionId={questions[0]} />
+      <Navigation
+        quizId={quizId}
+        hasQuizHistory={hasQuizHistory}
+        startQuestionId={questions[0]}
+      />
     </section>
   );
 }

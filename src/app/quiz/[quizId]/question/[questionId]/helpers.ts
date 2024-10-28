@@ -1,5 +1,6 @@
 'use client'
 
+import type { QuizSelectedAnswers } from '@/app/api/quiz/types';
 import type { Question } from '@/app/sharedTypes/categories';
 
 const generateCorrectAnswerIndex = ({
@@ -25,29 +26,7 @@ export const generateResponseOptions = ({
   return [...leftArr, correctAnswer, ...rightArr];
 };
 
-export interface StorageAnswer {
-  selectedAnswer: string,
-  correctAnswer: string,
-}
-
-export const getQuizPoints = ({
-  currentStorageQuiz, questionId, selectedAnswer, correctAnswer,
-}: {
-  currentStorageQuiz: Record<string, StorageAnswer>,
-  questionId: string,
-  selectedAnswer: string,
-  correctAnswer: string,
-}) => {
-  const isAnswerNewAndCorrect = !currentStorageQuiz[questionId] && (selectedAnswer === correctAnswer);
-
-  return Object.values(currentStorageQuiz)
-    .reduce((total, answer) => total + getScorePerQuestion(answer), isAnswerNewAndCorrect ? 1 : 0);
+export const getQuizPoints = (selectedAnswers: QuizSelectedAnswers) => {
+  return Object.values(selectedAnswers)
+    .reduce((total, { selectedAnswer, correctAnswer }) => total + (+(selectedAnswer === correctAnswer)), 0);
 };
-
-export const getScorePerQuestion = ({ selectedAnswer, correctAnswer }: StorageAnswer) => {
-  if (selectedAnswer === correctAnswer) {
-    return 1;
-  }
-
-  return 0;
-}

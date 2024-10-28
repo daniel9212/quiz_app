@@ -1,15 +1,20 @@
-import type { CategoryData } from './handlers';
-import { readFromFile } from '@/app/api/file';
+import type { QuizParams } from '@/app/sharedTypes/categories';
+import type { DBQuizSelectedAnswers } from '@/app/api/quiz/types';
+import { readFromFile, writeToFile } from '@/app/api/file';
 
-const CATEGORIES_PATH = '/src/app/db/categories.json';
-const QUESTIONS_PATH = '/src/app/db/questions.json';
+const USER_PATH = '/src/app/db/user.json';
 
-export async function GET(_: Request, { params: { quizId } }: { params: { quizId: string } }) {
-  const { data: categoriesData } = await readFromFile<Record<string, CategoryData>>(CATEGORIES_PATH);
-  const { data: questionsData } = await readFromFile<Record<string, CategoryData>>(QUESTIONS_PATH);
+export async function PATCH(_: Request, { params: { quizId } }: { params: QuizParams }) {
+  const { data: userData } = await readFromFile<Record<string, DBQuizSelectedAnswers> | Record<string, never>>(USER_PATH);
 
-  const questionIds = categoriesData[quizId].questions;
-  const quizQuestions = questionIds.map(questionId => questionsData[questionId]);
+  const updatedUserData = { ...userData, [quizId]: {} };
 
-  return Response.json({ questions: quizQuestions });
+  await writeToFile(USER_PATH, JSON.stringify(updatedUserData));
+
+  return new Response(JSON.stringify({ message: 'Quiz History Removed' }), {
+    headers: {
+      'Content-type': 'application/json',
+    },
+    status: 200,
+  });
 }

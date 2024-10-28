@@ -1,3 +1,9 @@
+export interface CategoryData {
+  id: string,
+  name: string,
+  questions: string[],
+}
+
 export interface Question {
   id: string,
   question: string,
@@ -11,4 +17,8 @@ export interface QuizParams {
 
 export interface QuestionParams extends QuizParams {
   questionId: string,
+}
+
+export interface QuestionData {
+  questionData: Question,
 }

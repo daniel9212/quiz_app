@@ -1,5 +1,8 @@
-import type { QuestionParams, Question } from '@/app/sharedTypes/categories';
-import type { CategoryData } from '@/app/api/quiz/[quizId]/handlers';
+import type {
+  QuestionParams, Question, QuestionData, CategoryData,
+} from '@/app/sharedTypes/categories';
+import type { QuizSelectedAnswers, DBQuizSelectedAnswers } from '@/app/api/quiz/types';
+import { mapSelectedToCorrectAnswer } from '@/app/api/quiz/[quizId]/question/[questionId]/helpers';
 import { readFromFile } from '@/app/api/file';
 
 interface AdditionalQuestionData {
@@ -8,11 +11,8 @@ interface AdditionalQuestionData {
     nextQuestionId: string | null,
     totalQuestionsNumber: number,
     questionIndex: number,
+    selectedAnswers: QuizSelectedAnswers,
   },
-}
-
-export interface QuestionData {
-  questionData: Question,
 }
 
 export interface QuestionWithAdditionalData extends QuestionData, AdditionalQuestionData {}
@@ -22,20 +22,28 @@ interface QuestionReturn {
   data: QuestionWithAdditionalData,
 }
 
+const CATEGORIES_PATH = '/src/app/db/categories.json';
+const QUESTIONS_PATH = '/src/app/db/questions.json';
+const USER_PATH = '/src/app/db/user.json';
+
 const DEFAULT_ERROR_MESSAGE = "There was an error reading the files";
 
 export async function fetchQuestion({ quizId, questionId }: QuestionParams): Promise<QuestionReturn> {
   const {
     error: categoriesError, data: categoriesData,
-  } = await readFromFile<Record<string, CategoryData>>('/src/app/db/categories.json');
+  } = await readFromFile<Record<string, CategoryData>>(CATEGORIES_PATH);
 
   const {
     error: questionsError, data: questionsData,
-  } = await readFromFile<Record<string, Question>>('/src/app/db/questions.json');
+  } = await readFromFile<Record<string, Question>>(QUESTIONS_PATH);
 
-  if (categoriesError || questionsError) {
+  const {
+    error: userError, data: userData,
+  } = await readFromFile<Record<string, DBQuizSelectedAnswers> | Record<string, never>>(USER_PATH);
+
+  if (categoriesError || questionsError || userError) {
     return {
-      error: categoriesError?.message ?? questionsError?.message ?? DEFAULT_ERROR_MESSAGE,
+      error: categoriesError?.message ?? questionsError?.message ?? userError?.message ?? DEFAULT_ERROR_MESSAGE,
       data: {} as QuestionWithAdditionalData,
     };
   }
@@ -51,6 +59,9 @@ export async function fetchQuestion({ quizId, questionId }: QuestionParams): Pro
     return { error: 'Question not found!', data: {} as QuestionWithAdditionalData };
   }
 
+  const userQuizQuestions = userData[quizId] ?? {};
+  const selectedAnswers = mapSelectedToCorrectAnswer({ userQuizQuestions, questionsData })
+
   const totalQuestionsNumber = questionIds.length;
   return {
     error: null,
@@ -65,6 +76,7 @@ export async function fetchQuestion({ quizId, questionId }: QuestionParams): Pro
           : null,
         totalQuestionsNumber,
         questionIndex: currentQuestionIndex,
+        selectedAnswers,
       },
     },
   };

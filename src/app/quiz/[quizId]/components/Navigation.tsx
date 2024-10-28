@@ -1,29 +1,14 @@
-'use client'
-
-import { useState, useEffect } from 'react';
-
-import type { StorageQuizes } from '@/app/quiz/[quizId]/question/[questionId]/hooks/useQuestionData';
+import type { RestartQuizButtonProps } from '@/app/quiz/[quizId]/components/RestartQuizButton';
 import LinkButton from '@/app/components/LinkButton';
+import RestartQuizButton from '@/app/quiz/[quizId]/components/RestartQuizButton';
 
-interface NavigationProps {
-  quizId: string,
-  startQuestionId: string,
+interface NavigationProps extends RestartQuizButtonProps {
+  hasQuizHistory: boolean,
 }
 
-export default function Navigation({ quizId, startQuestionId }: NavigationProps) {
-  const [storageQuizes, setStorageQuizes] = useState<StorageQuizes>({});
-
-  useEffect(() => {
-    setStorageQuizes(JSON.parse(localStorage.getItem('quizes')!) ?? {});
-  }, []);
-
-  const isQuizStarted = Object.keys(storageQuizes[quizId] ?? {}).length !== 0;
-
-  const onRestartQuiz = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [quizId]: _, ...restQuizes } = storageQuizes;
-    localStorage.setItem('quizes', JSON.stringify(restQuizes));
-  };
+export default function Navigation({
+  quizId, startQuestionId, hasQuizHistory,
+}: NavigationProps) {
 
   return (
     <>
@@ -35,15 +20,13 @@ export default function Navigation({ quizId, startQuestionId }: NavigationProps)
         />
         <LinkButton
           href={`/quiz/${quizId}/question/${startQuestionId}`}
-          title={isQuizStarted ? 'View Progress' : 'Start Quiz'}
+          title={hasQuizHistory ? 'View Progress' : 'Start Quiz'}
           className="bg-sky-600 text-white"
         />
-        {isQuizStarted && (
-          <LinkButton
-            href={`/quiz/${quizId}/question/${startQuestionId}`}
-            title="Restart Quiz"
-            className="bg-red-600 text-white"
-            onClick={onRestartQuiz}
+        {hasQuizHistory && (
+          <RestartQuizButton
+            quizId={quizId}
+            startQuestionId={startQuestionId}
           />
         )}
       </div>

@@ -1,15 +1,17 @@
 import uniqId from 'uniqid';
 
-import type { CategoryData } from '@/app/api/quiz/[quizId]/handlers';
+import type {
+  Question, QuizParams, CategoryData,
+} from '@/app/sharedTypes/categories';
 import { readFromFile, writeToFile } from '@/app/api/file';
 
 const CATEGORIES_PATH = '/src/app/db/categories.json';
 const QUESTIONS_PATH = '/src/app/db/questions.json';
 
 // TODO: Add validation (if quizId is not in quizes)
-export async function POST(request: Request, { params: { quizId } }: { params: { quizId: string } }) {
+export async function POST(request: Request, { params: { quizId } }: { params: QuizParams }) {
   const { data: categoriesData } = await readFromFile<Record<string, CategoryData>>(CATEGORIES_PATH);
-  const { data: questionsData } = await readFromFile<Record<string, CategoryData>>(QUESTIONS_PATH);
+  const { data: questionsData } = await readFromFile<Record<string, Question>>(QUESTIONS_PATH);
 
   const newQuestionId = uniqId();
   const newCategoryQuestions = [...categoriesData[quizId].questions, newQuestionId];
