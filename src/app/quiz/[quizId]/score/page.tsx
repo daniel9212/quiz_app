@@ -1,59 +1,22 @@
-'use client'
+import { redirect } from 'next/navigation';
+import { fetchQuizScore } from '@/app/api/quiz/[quizId]/score/handlers';
 
-import {
-  useState, useEffect,
-} from 'react';
-import { useRouter } from 'next/navigation';
-
-import type { QuestionParams } from '@/app/quiz/[quizId]/question/[questionId]/components/QuestionLayout';
+import type { QuizParams } from '@/app/sharedTypes/categories';
 import LinkButton from '@/app/components/LinkButton';
-import {
-  type StorageAnswer,
-  getScorePerQuestion,
-} from '@/app/quiz/[quizId]/question/[questionId]/helpers';
-import { request } from '@/app/api/base';
 
-const INITIAL_QUIZ_STATE = {
-  quizPoints: 0,
-  totalQuizQuestions: 0,
-};
+export default async function Score({ params: { quizId } }: { params: QuizParams }) {
+  const { error, data } = await fetchQuizScore(quizId);
 
-export default function Score({ params: { quizId } }: { params: QuestionParams }) {
-  const [{ quizPoints, totalQuizQuestions }, setQuizState] = useState(INITIAL_QUIZ_STATE);
-  const router = useRouter();
+  if (error) {
+    redirect(`/quiz/${quizId}`);
+  }
 
-  useEffect(() => {
-    (async () => {
-      let questions;
-      const storageQuestions = JSON.parse(localStorage.getItem('quizes')!)?.[quizId] ?? [];
-
-      try {
-        const questionsResponse = await request(`/api/quiz/${quizId}`);
-        questions = questionsResponse.data.questions;
-      } catch(error) {
-        questions = storageQuestions;
-        console.error(error);
-      }
-  
-      if (storageQuestions.length === 0) {
-        router.push(`/quiz/${quizId}`);
-      }
-  
-      const quizPoints = storageQuestions.reduce((total: number, storageAnswer: StorageAnswer) => total + getScorePerQuestion(storageAnswer), 0);
-      const totalQuizQuestions = questions.length;
-  
-      setQuizState({
-        quizPoints,
-        totalQuizQuestions,
-      });
-    })()
-
-  }, [quizId, router]);
+  const { quizScore, totalQuizQuestions } = data;
 
   return (
     <div>
       <section className='text-3xl'>
-        <h2 className='mb-10'>Correct answers: {quizPoints}</h2>
+        <h2 className='mb-10'>Correct answers: {quizScore}</h2>
         <h2>Total questions: {totalQuizQuestions}</h2>
       </section>
       <div className='flex'>

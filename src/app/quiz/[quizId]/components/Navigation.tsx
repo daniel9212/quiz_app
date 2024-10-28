@@ -1,28 +1,14 @@
-'use client'
-
-import { useState, useEffect } from 'react';
-
-import type { StorageQuizes } from '@/app/quiz/[quizId]/question/[questionId]/hooks/useQuestionData';
+import type { RestartQuizButtonProps } from '@/app/quiz/[quizId]/components/RestartQuizButton';
 import LinkButton from '@/app/components/LinkButton';
+import RestartQuizButton from '@/app/quiz/[quizId]/components/RestartQuizButton';
 
-interface NavigationProps {
-  quizId: string,
+interface NavigationProps extends RestartQuizButtonProps {
+  hasQuizHistory: boolean,
 }
 
-export default function Navigation({ quizId }: NavigationProps) {
-  const [storageQuizes, setStorageQuizes] = useState<StorageQuizes>({});
-
-  useEffect(() => {
-    setStorageQuizes(JSON.parse(localStorage.getItem('quizes')!) ?? {});
-  }, []);
-
-  const isQuizStarted = (storageQuizes[quizId] ?? []).length !== 0;
-
-  const onRestartQuiz = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [quizId]: _, ...restQuizes } = storageQuizes;
-    localStorage.setItem('quizes', JSON.stringify(restQuizes));
-  };
+export default function Navigation({
+  quizId, startQuestionId, hasQuizHistory,
+}: NavigationProps) {
 
   return (
     <>
@@ -33,16 +19,14 @@ export default function Navigation({ quizId }: NavigationProps) {
           className="bg-white"
         />
         <LinkButton
-          href={`/quiz/${quizId}/question/1`}
-          title={isQuizStarted ? 'View Progress' : 'Start Quiz'}
+          href={`/quiz/${quizId}/question/${startQuestionId}`}
+          title={hasQuizHistory ? 'View Progress' : 'Start Quiz'}
           className="bg-sky-600 text-white"
         />
-        {isQuizStarted && (
-          <LinkButton
-            href={`/quiz/${quizId}/question/1`}
-            title="Restart Quiz"
-            className="bg-red-600 text-white"
-            onClick={onRestartQuiz}
+        {hasQuizHistory && (
+          <RestartQuizButton
+            quizId={quizId}
+            startQuestionId={startQuestionId}
           />
         )}
       </div>

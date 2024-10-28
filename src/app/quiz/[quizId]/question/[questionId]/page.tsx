@@ -1,30 +1,19 @@
-import { redirect } from 'next/navigation';
-
-import QuestionLayout, { type QuestionParams } from '@/app/quiz/[quizId]/question/[questionId]/components/QuestionLayout';
+import type { QuestionParams } from '@/app/sharedTypes/categories';
+import QuestionLayout from '@/app/quiz/[quizId]/question/[questionId]/components/QuestionLayout';
 import Error from '@/app/components/Error';
-import { getQuizData } from '@/app/helpers/jsonProcessing';
+import { fetchQuestion } from '@/app/api/quiz/[quizId]/question/[questionId]/handlers';
 
-export default async function Question({
-  params: { quizId, questionId },
-}: { params: QuestionParams }) {
-  const { error, data } = await getQuizData(quizId);
+export default async function Question({ params }: { params: QuestionParams }) {
+  const { error, data } = await fetchQuestion(params);
 
   if(error) {
     return <Error message={error} />
   }
 
-  const { questions } = data;
-  const questionIndex = +questionId;
-
-  if (questionIndex < 1 || questionIndex > questions.length) {
-    return redirect(`/quiz/${quizId}`);
-  }
-
   return (
     <QuestionLayout
-      questions={questions}
-      quizId={quizId}
-      questionId={questionId}
+      {...data}
+      {...params}
     />
   );
 }

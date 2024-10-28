@@ -1,34 +1,20 @@
-import uniqId from 'uniqid';
-
-import type { Quiz } from '@/app/helpers/jsonProcessing';
+import type { QuizParams } from '@/app/sharedTypes/categories';
+import type { DBQuizSelectedAnswers } from '@/app/api/quiz/types';
 import { readFromFile, writeToFile } from '@/app/api/file';
 
-const FILE_PATH = '/src/app/data/quizesData.json';
+const USER_PATH = '/src/app/db/user.json';
 
-// TODO: Add validation (if quizId is not in quizes)
-export async function POST(request: Request, { params: { quizId } }: { params: { quizId: string } }) {
-  const { data: { quizes } } = await readFromFile<{ quizes: Quiz }>(FILE_PATH);
+export async function PATCH(_: Request, { params: { quizId } }: { params: QuizParams }) {
+  const { data: userData } = await readFromFile<Record<string, DBQuizSelectedAnswers> | Record<string, never>>(USER_PATH);
 
-  const questionData = await request.json();
+  const updatedUserData = { ...userData, [quizId]: {} };
 
-  questionData.id = uniqId();
+  await writeToFile(USER_PATH, JSON.stringify(updatedUserData));
 
-  const { questions } = quizes[quizId];
-  quizes[quizId].questions = [...questions, questionData];
-
-  await writeToFile(FILE_PATH, JSON.stringify({ quizes }));
-
-  return new Response(JSON.stringify({ data: questionData }), {
+  return new Response(JSON.stringify({ message: 'Quiz History Removed' }), {
     headers: {
       'Content-type': 'application/json',
     },
-    status: 201,
+    status: 200,
   });
-}
-
-export async function GET(_: Request, { params: { quizId } }: { params: { quizId: string } }) {
-  const { data: { quizes } } = await readFromFile<{ quizes: Quiz }>(FILE_PATH);
-
-  const { questions } = quizes[quizId];
-  return Response.json({ questions });
 }
